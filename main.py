@@ -9,7 +9,7 @@ load_dotenv()
 
 model = OpenRouterModel(
     'anthropic/claude-haiku-4.5',
-    provider=OpenRouterProvider(api_key=os.getenv('API_KEY')),
+    provider=OpenRouterProvider(api_key=os.getenv('OPENROUTER_API_KEY')),
 )
 
 agent = Agent(
