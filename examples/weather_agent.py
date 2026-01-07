@@ -33,7 +33,7 @@ class Deps:
 
 
 model = OpenRouterModel(
-    'anthropic/claude-haiku-4.5',
+    'xiaomi/mimo-v2-flash:free',
     provider=OpenRouterProvider(api_key=os.getenv('OPENROUTER_API_KEY')),
 )
 
