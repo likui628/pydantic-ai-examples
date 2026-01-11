@@ -956,6 +956,25 @@ wheels = [
 ]
 
 [[package]]
+name = "learn-agent"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "logfire" },
+    { name = "pydantic-ai" },
+    { name = "pydantic-ai-slim", extra = ["openai", "openrouter"] },
+    { name = "python-dotenv" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "logfire", specifier = ">=4.16.0" },
+    { name = "pydantic-ai", specifier = ">=1.39.1" },
+    { name = "pydantic-ai-slim", extras = ["openai", "openrouter"], specifier = ">=1.39.1" },
+    { name = "python-dotenv", specifier = ">=1.2.1" },
+]
+
+[[package]]
 name = "logfire"
 version = "4.16.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1526,25 +1545,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/64/a8/713062436aefea42b0252e141f1219fd342d7ea414662e4d894f2f77a234/pydantic_ai-1.39.1.tar.gz", hash = "sha256:c374e7bf16b9efd2eb9472638ca9c1d9ea1bcfc2e824209825fe3a527e72ed03", size = 11624, upload-time = "2026-01-06T00:13:06.53Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/36/da/1520b9a59f8305277b173a9834d1d468fd30aed548f84861e4b576e545a8/pydantic_ai-1.39.1-py3-none-any.whl", hash = "sha256:612475fd5ecaad85470735cdd2da29aac8ebc82f9f08ac57ba1b8d99c2c0f896", size = 7190, upload-time = "2026-01-06T00:12:57.787Z" },
-]
-
-[[package]]
-name = "pydantic-ai-demo"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "logfire" },
-    { name = "pydantic-ai" },
-    { name = "pydantic-ai-slim", extra = ["openai", "openrouter"] },
-    { name = "python-dotenv" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "logfire", specifier = ">=4.16.0" },
-    { name = "pydantic-ai", specifier = ">=1.39.1" },
-    { name = "pydantic-ai-slim", extras = ["openai", "openrouter"], specifier = ">=1.39.1" },
-    { name = "python-dotenv", specifier = ">=1.2.1" },
 ]
 
 [[package]]
