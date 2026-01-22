@@ -427,6 +427,7 @@ def todo_write(items: list) -> str:
     except Exception as e:
         return f"Error: {e}"
 
+
 async def task_tool(ctx, prompt: str, agent_type: str = "explore") -> str:
     """
     Spawn a subagent to handle a focused task.
@@ -449,6 +450,33 @@ TOOL_REGISTRY = {
     "edit_file": edit_file,
     "todo_write": todo_write,
 }
+
+
+async def run_with_tool_logging(agent: Agent, prompt: str, prefix: str = "") -> str:
+    """
+    Run an agent and print tool call/result events.
+
+    Args:
+        agent: The agent to run
+        prompt: User prompt
+        prefix: Optional prefix for log lines (e.g., "[subagent] ")
+    """
+    tool_call_names: dict[str, str] = {}
+    final_output = ""
+
+    async for event in agent.run_stream_events(prompt):
+        if isinstance(event, FunctionToolCallEvent):
+            tool_call_names[event.part.tool_call_id] = event.part.tool_name
+            print(
+                f"{prefix}[tool call] {event.part.tool_name} args={event.part.args}")
+        elif isinstance(event, FunctionToolResultEvent):
+            tool_name = tool_call_names.get(event.tool_call_id, "")
+            print(
+                f"{prefix}[tool result] {tool_name} -> {event.result.content}")
+        elif isinstance(event, AgentRunResultEvent):
+            final_output = event.result.output or ""
+
+    return final_output
 
 
 def create_agent(agent_type: str = "main") -> Agent:
@@ -523,8 +551,12 @@ async def run_task(ctx, prompt: str, agent_type: str = "explore") -> str:
     subagent = create_agent(agent_type)
     try:
         print(f"Spawning subagent ({agent_type}) for task:\n{prompt}\n")
-        response = await subagent.run(prompt)
-        return response.output
+        response_output = await run_with_tool_logging(
+            subagent,
+            prompt,
+            prefix=f"[subagent:{agent_type}] ",
+        )
+        return response_output
     except Exception as e:
         print(f"Subagent error: {e}")
         return f"Error: Subagent failed - {e}"
@@ -549,8 +581,8 @@ async def main():
         try:
             main_agent = create_agent("main")
 
-            response = await main_agent.run(user_input)
-            print(response.output)
+            response_output = await run_with_tool_logging(main_agent, user_input)
+            print(response_output)
             print()  # Blank line between turns
         except Exception as e:
             print(f"\033[31mError: {e}\033[0m")
